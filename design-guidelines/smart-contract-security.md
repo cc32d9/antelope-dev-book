@@ -15,8 +15,6 @@ this will process all `transfer` action notifications where your contract is eit
 
 There are token contracts handing multiple currencies, so it’s also important to validate the symbol in `quantity`.
 
-
-
 ## Check that `to == _self` <a href="#6243" id="6243"></a>
 
 In transfer notification, a common logical error by many contract authors was that if `from` is not me, it must be a payment for me. Well, it’s wrong.
@@ -43,7 +41,7 @@ This attack happened in the end of 2018 and many casinos on EOS were drained.
 
 `nodeos` has several options in how to handle `get_table_rows` calls. By default, the node returns the table rows which may be altered by speculative transactions which are in transit, but have not been included in a block yet.
 
-So, the attackers found (or maybe just tried) which casinos were quering speculative nodes, and injected their bets in such a way that they failed before being included in a block. The casino was reading from speculative state, and assuming that the bets were made, and sending back the wins in real money. The attacker didn’t even spend any token because the bet was placed by a contract that fails after a certain short time period.
+So, the attackers found (or maybe just tried) which casinos were querying speculative nodes, and injected their bets in such a way that they failed before being included in a block. The casino was reading from speculative state, and assuming that the bets were made, and sending back the wins in real money. The attacker didn’t even spend any token because the bet was placed by a contract that fails after a certain short time period.
 
 So, the API node needs to be configured to either use `read-mode=head`, or to disable speculative transactions coming in. And best of all, if the contract is subject to such a vulnerability, the dapp needs their own API nodes under their own control. Also the game contracts need to verify that the bet is valid before sending back the rewards.
 

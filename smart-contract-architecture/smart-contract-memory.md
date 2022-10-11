@@ -29,8 +29,8 @@ Further down in `multi_index.hpp`  we can see the  `multi_index` class definitio
 
 You may notice a few interesting facts by studying this header file:
 
-1. A table row is always retrieved from the store and deserialized, whenever you access it via any of the class methods or the iterator.
-2. But not always, because there's cache: the multi-index object memorizes the retrieved row and returns it on the next read. This speeds up the operation if you access the same row several times. But if two indexes of multi-index are referring to the same table, modifying or deleting a row may result in unwanted effects. The **rule of thumb** is to avoid creating multiple multi-index objects for the same table within the same action execution.
+1. A table row is always retrieved from the store and deserialized, whenever you access it via any of the class methods or the iterator, except the row is already in a cache.
+2. Table rows which were previously retrieved or written by a multi-index object are stored in cache. This speeds up the operation if you access the same row several times. But if two indexes of multi-index are referring to the same table, modifying or deleting a row may result in unwanted effects. The **rule of thumb** is to avoid creating multiple multi-index objects for the same table within the same action execution.
 3. Whenever you erase a row, the next row  in the iterator is retrieved from the contract store. So, erasing a row is not a cheap operation: even if you delete one row in an action, at least two rows have been retrieved when the action is executed.
 
 Also, food for thought for a curious reader:
@@ -40,10 +40,10 @@ Also, food for thought for a curious reader:
 
 ## RAM payers and quotas
 
-Every low-level operation which requires a new memory allocation is taking a `payer` parameter. The node keeps track of ownership of every table row, and deducts the alocation size from the payer's quota.&#x20;
+Every low-level operation which requires a new memory allocation is taking a `payer` parameter. The node keeps track of ownership of every table row, and deducts the allocation size from the payer's quota.&#x20;
 
-`Nodeos` allows only the contract itself or an accout which authorized the transaction to be the RAM payer.
+`Nodeos` allows only the contract itself or an account which authorized the transaction to be the RAM payer.
 
-Each account has a quota of RAM that it's allowed to spend on data structures. Also privileged accouts (such as the system contract `eosio`) have unlimited RAM quotas.
+Each account has a quota of RAM that it's allowed to spend on data structures. Also privileged accounts (such as the system contract `eosio`) have unlimited RAM quotas.
 
-It is up to the system contract to define how the quotas are assigned to accounts. In most blockchains RAM needs to be purchased on the RAM market.
+It is up to the system contract to define how the quotas are assigned to accounts. In most blockchains RAM needs to be purchased on the RAM market. [Typically `buyram` and `sellram` actions](https://github.com/eosnetworkfoundation/eos-system-contracts/blob/main/contracts/eosio.system/include/eosio.system/eosio.system.hpp) in the system contract are responsible for this.

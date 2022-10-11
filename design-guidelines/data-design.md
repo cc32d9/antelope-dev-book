@@ -16,7 +16,7 @@ While planning the structure of your data tables, you need to take a few aspects
 
 * Memory and CPU are at a cost, so you only need to store the essential data that is needed for your smart contract and the application. Bulky data that is only used outside of the blockchain can be referred to by a sha256 hash or IPFS URL, and stored somewhere else.
 * When reading a table row, there are always three stages:&#x20;
-  * finding the table by name, scope and contract in nodeos state memory: logarithmic complexity
+  * finding the table by name, [scope ](data-design.md#table-scope)and contract in nodeos state memory: logarithmic complexity
   * finding the row within the table by primary or secondary index: logarithmic complexity. But if secondary index is involved, we first retrieve the primary key from the secondary index, and then retrieve the row by primary key.
   * reading the row from nodeos state memory and deserializing it within the contract: linear complexity, proportional to the size of the entry.
 * Writing a table row has approximately the same complexity as reading, but with slightly higher complexity because of secondary indexes: the row needs to be serialized, then placed in nodeos state memory with the given primary key, and then all secondary indexes need to be updated.
