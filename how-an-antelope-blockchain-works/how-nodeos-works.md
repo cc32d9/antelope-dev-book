@@ -34,7 +34,7 @@ A running `nodeos` process is using a number of API protocols in its interaction
 
 ### HTTP RPC
 
-The [EOSIO Developers Portal](https://developers.eos.io/welcome/latest/reference/index) has a full reference of the RPC endpoints. Below we list the most essential ones for a blockchain developer. The node provides a standard HTTP interface at the TCP port specified by the `http-server-address` configuration option. It also supports HTTPS mode, but it's not recommended, as SSL termination is more efficiently handled by a separate service, such as nginx.
+The [EOSIO Developers Portal](https://docs.eosnetwork.com/) has a full reference of the RPC endpoints. Below we list the most essential ones for a blockchain developer. The node provides a standard HTTP interface at the TCP port specified by the `http-server-address` configuration option. It also supports HTTPS mode, but it's not recommended, as SSL termination is more efficiently handled by a separate service, such as nginx.
 
 * `/v1/chain/get_info` shows the state of the blockchain as seen by the node. The most important fields are explained below:
   * `chain_id` is a unique 32-byte identifier that distinguishes the blockchains one from the other.

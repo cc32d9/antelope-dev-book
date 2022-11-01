@@ -103,6 +103,14 @@ One may notice that 18 billions of billions combinations is a bit too much for a
     > students;
 ```
 
+## Choosing secondary indexes
+
+As you design a new smart contract, it is tempting to add secondary indexes for every possible query. But the indexes are occupying a quite significant amount of memory, so it might turn out too expensive to maintain all the secondary indexes for millions of records in our table.
+
+If you foresee a table with hundreds of thousands or millions of rows, you need to keep the secondary indexes down to the necessary minimum, as the RAM costs may become prohibitive. A common approach is to only define the indexes which are required by the smart contract itself. If you need the user interface to find table records quickly, there are ways to index them outside of the smart contract. For example, by using the state history plugin, one may store and update all the table records in a database which calculates all the necessary indexes automatically.&#x20;
+
+On the contrary, a table with data which is guaranteed to occupy only a limited space may benefit from indexing the fields which are not strictly required to be indexed by the contract itself. But the user interface would be able to retrieve the records quickly without any additional infrastructure.
+
 ## Table scope
 
 Table names and their primary indexes form a two-dimensional data space. But there is a third dimension, called _scope_. In early EOSIO design, scopes were thought to be used for parallelizing the transaction execution, but it was considered too complex later. Still, the scopes remained.&#x20;

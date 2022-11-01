@@ -16,4 +16,4 @@
 
 * [Smart contract security](design-guidelines/smart-contract-security.md)
 * [Data design](design-guidelines/data-design.md)
-* [Performance and scaling](design-guidelines/performance-and-scaling.md)
+* [Performance optimization](design-guidelines/performance-optimization.md)
