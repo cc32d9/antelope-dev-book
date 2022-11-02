@@ -31,7 +31,7 @@ So, before sending a transaction, we need to know how the actions are called, an
 
 Keep in mind that there might be accounts with WASM and without ABI (in this case, you would need to disassemble the WASM to understand what the arguments mean), and also accounts with ABI and without WASM (they would simply accept whatever you send to them).
 
-A typical client, such as `eosjs`, would get the contract name, action name, and a map pf arguments in its `transact` method. Under the hood, it will need to retrieve the ABI of specified contract account, and pack the action arguments according to the ABI specification. In addition to that, it also retrieves the reference block information. As you can see, a lot is happening in just a single transaction preparation.
+A typical client, such as `eosjs`, would get the contract name, action name, and a map of arguments in its `transact` method. Under the hood, it will need to retrieve the ABI of specified contract account, and pack the action arguments according to the ABI specification. In addition to that, it also retrieves the reference block information. As you can see, a lot is happening in just a single transaction preparation.
 
 In addition to that, a transaction needs to have elliptic curve signatures that correspond to the autorizations specified in each action. The client normally doesn't know which keys are needed in advance, so once again it sends another RPC request to find out which of its keys need to sign the transaction for it to go through.
 
@@ -71,7 +71,7 @@ If the last block of the previous producer hasn't arrived to the current produce
 
 There are a few other failure scenarios that cause microforks: for example, the server clocks at the producer nodes lose their time synchronization. The worst-case scenario is when 1/3 of active producers are offline, and that prevents LIB from advancing. In such a situation, all blocks after the LIB will potentially be discarded.
 
-A block becomes final as soon as a supermajority of active producers has signed their blocks _twice_. In other words, 4/3+2 producing windows, 6 seconds each, need to pass before the block is declared final and cannot be rewriten by a microfork. Thus results in about 2 minutes of irreversibility delay.
+A block becomes final as soon as a supermajority of active producers has signed their blocks _twice_. In other words, 4/3+2 producing windows, 6 seconds each, need to pass before the block is declared final and cannot be rewrirewrittenten by a microfork. Thus results in about 2 minutes of irreversibility delay.
 
 Work is in progress, aiming to reduce the finality time to 1-2 blocks, which will increase the stability and usability of the blockchain a lot.
 
