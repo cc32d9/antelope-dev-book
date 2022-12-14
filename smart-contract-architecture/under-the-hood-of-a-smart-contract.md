@@ -92,7 +92,7 @@ Thus, if the caller has serialized the arguments in the wrong order, or used inc
 
 Using the modern CDT kit, you do not need to care about the `apply()` function as the CDT is generating it from `[[eosio::action]]` and `[[eosio::on_notify]]` labels in your C++ sources.
 
-Let's have a closer look at the `challenge` action example above. The `[[eosio::action]]` doesn't have any name specifier, so it's equal to `[[eosio::action("challenge")]]`. The name in the parens defines the action name that will be used by the dispatcher and will be published in the ABI. Then comes the class method name, which could - in theory - be different from the action name, but practically it's more convenient when the methods have the same names as actions.&#x20;
+Let's have a closer look at the `challenge` action example above. The `[[eosio::action]]` doesn't have any name specifier, so it's equal to `[[eosio::action("challenge")]]`. The name in the parens defines the action name that will be used by the dispatcher and will be published in the ABI. Then comes the class method name, which could -- in theory -- be different from the action name, but practically it's more convenient when the methods have the same names as actions.&#x20;
 
 A notification handler may be specific for a particular contract name or a generic one using a wildcard:
 

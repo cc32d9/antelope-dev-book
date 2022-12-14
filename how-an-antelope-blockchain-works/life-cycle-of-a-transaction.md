@@ -71,7 +71,7 @@ If the last block of the previous producer hasn't arrived to the current produce
 
 There are a few other failure scenarios that cause microforks. For example, the server clocks at the producer nodes lose their time synchronization. The worst-case scenario is when 1/3 of active producers are offline, and that prevents LIB from advancing. In such a situation, all blocks after the LIB will potentially be discarded.
 
-A block becomes final as soon as a supermajority of active producers has signed their blocks _twice_. In other words, 4/3+2 producing windows - 6 seconds each - need to pass before the block is declared final and cannot be rewritten by a microfork. This results in about 2 minutes of irreversibility delay.
+A block becomes final as soon as a supermajority of active producers has signed their blocks _twice_. In other words, 4/3+2 producing windows -- 6 seconds each -- need to pass before the block is declared final and cannot be rewritten by a microfork. This results in about 2 minutes of irreversibility delay.
 
 Work is in progress, aiming to reduce the finality time to 1-2 blocks, which will increase the stability and usability of the blockchain a lot.
 
