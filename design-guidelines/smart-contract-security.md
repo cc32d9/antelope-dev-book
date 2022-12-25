@@ -4,16 +4,16 @@ This chapter is a copy of my older [blog post](https://cc32d9.medium.com/eosio-c
 
 ## Check the token contract <a href="#3403" id="3403"></a>
 
-Older CDT versions did not offer a nice wrapper for `apply()` handler, so the contract authors needed to pay more attention on notifications. Current CDT screens these mechanics by predefined macros. Still, you can create an universal notification receiver, like:
+Older CDT versions did not offer a nice wrapper for `apply()` handler, so the contract authors needed to pay more attention on notifications. Current CDT screens these mechanics by predefined macros. Still, you can create a universal notification receiver, like:
 
 ```clike
 [[eosio::on_notify("*::transfer")]] 
   void on_payment (name from, name to, asset quantity, string memo) {...}
 ```
 
-this will process all `transfer` action notifications where your contract is either To, or From. The notification can come from a standard token contract, or from a specially crafted contract that simulates the token behavior. So, before assuming the payment as valid, always check that the token contract is what you expect. The contract account is retrieved by calling `get_first_receiver()`.
+This will process all `transfer` action notifications where your contract is either To or From. The notification can come from a standard token contract, or from a specially crafted contract that simulates the token behavior. So, before assuming the payment as valid, always check that the token contract is what you expect. The contract account is retrieved by calling `get_first_receiver()`.
 
-There are token contracts handing multiple currencies, so it’s also important to validate the symbol in `quantity`.
+There are token contracts handling multiple currencies, so it’s also important to validate the symbol in `quantity`.
 
 ## Check that `to == _self` <a href="#6243" id="6243"></a>
 
@@ -39,23 +39,23 @@ So, your notification handler should look like this:
 
 This attack happened in the end of 2018 and many casinos on EOS were drained.
 
-`nodeos` has several options in how to handle `get_table_rows` calls. By default, the node returns the table rows which may be altered by speculative transactions which are in transit, but have not been included in a block yet.
+`nodeos` has several options in how to handle `get_table_rows` calls. By default, the node returns the table rows which may be altered by speculative transactions which are in transit but have not been included in a block yet.
 
-So, the attackers found (or maybe just tried) which casinos were querying speculative nodes, and injected their bets in such a way that they failed before being included in a block. The casino was reading from speculative state, and assuming that the bets were made, and sending back the wins in real money. The attacker didn’t even spend any token because the bet was placed by a contract that fails after a certain short time period.
+So, the attackers found (or maybe just tried) which casinos were querying speculative nodes and injected their bets in such a way that they failed before being included in a block. The casino was reading from speculative state and assuming that the bets were made, and sending back the wins in real money. The attacker didn’t even spend any token because the bet was placed by a contract that fails after a certain short time period.
 
-So, the API node needs to be configured to either use `read-mode=head`, or to disable speculative transactions coming in. And best of all, if the contract is subject to such a vulnerability, the dapp needs their own API nodes under their own control. Also the game contracts need to verify that the bet is valid before sending back the rewards.
+So, the API node needs to be configured to either use `read-mode=head`, or to disable speculative transactions coming in. The best approach for such an application would be to have its own dedicated API nodes. Also, the game contracts need to verify that the bet is valid before sending back the rewards.
 
 ## Assume that an intruder injects inline actions between yours <a href="#afa1" id="afa1"></a>
 
-This is [what happened in EOSX Vault](https://cmichel.io/eos-vault-sx-hack/). The contract assumed a certain sequence of action and notification calls, and the intruder made a smart contract that reacts on notifications and injects inline actions between the vault’s.
+This is [what happened in EOSX Vault](https://cmichel.io/eos-vault-sx-hack/). The contract assumed a certain sequence of action and notification calls, and the intruder made a smart contract that reacts on notifications and injects inline actions between the actions of the vault contract.
 
-So, the rule of thumb is, never assume that your contract is called in a certain sequence. There will be a moment when it is not completely true and there’s an unexpected call in the middle of your workflow. Build your workflows with this in mind.
+So, the rule of thumb is to never assume that your contract is called in a certain sequence. There will be a moment when it is not completely true and there’s an unexpected call in the middle of your workflow. Build your workflows with this in mind.
 
 ## Asset can be negative <a href="#87d5" id="87d5"></a>
 
 Developers sometimes forget that the `asset` type allows negative values. Whenever a user submits an amount of currency to your contract, check that it is positive.
 
-Also worth noting that the 64-bit signed amount may overflow, and the attacker may exploit that as well.
+Also, it's worth noting that the 64-bit signed amount may overflow, and the attacker may exploit that as well.
 
 ## Other checks <a href="#dfff" id="dfff"></a>
 
@@ -63,7 +63,7 @@ The rest is just usual precautions when designing a smart contract:
 
 * check authorization of the caller
 * memory control: either allocate RAM from the caller’s pool, or make the calls cost something, to mitigate a DOS attack on your RAM pool.
-* sanity checks wherever possible. Do not assume that your contract works perfectly. Always check the values returned from contract tables, even if you’re sure they cannot be wrong. I do the following quite often:\
+* sanity checks wherever possible. Do not assume that your contract works perfectly. Always check the values returned from contract tables even if you’re sure they cannot be wrong. I do the following quite often:\
   `auto ciitr = ci.find(w.template_id);`\
   `check(ciitr != ci.end(), "Exception 3"); // this must never happen`
-* always let a fresh eye look at your code. The human brain assumes too much and it is blind to small mistakes in its own creation. Let someone else look through it, or order a proper security audit. Let others run tests on your code.
+* always let a fresh eye look at your code. The human brain assumes too much and it is blind to small mistakes of its own creation. Let someone else look through it, or order a proper security audit. Let others run tests on your code.
