@@ -17,3 +17,4 @@
 * [Smart contract security](design-guidelines/smart-contract-security.md)
 * [Data design](design-guidelines/data-design.md)
 * [Performance optimization](design-guidelines/performance-optimization.md)
+* [Customizing the Antelope software](design-guidelines/customizing-the-antelope-software.md)
